@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'rake'
-require 'lib/icuke/sdk'
 
 begin
   require 'jeweler'
@@ -23,6 +22,7 @@ rescue LoadError
 end
 
 file 'app/build/Debug-iphonesimulator/Universal.app/Universal' do
+  require 'lib/icuke/sdk'
   ICuke::SDK.use_latest
   sh "cd app && xcodebuild -target Universal -configuration Debug -sdk #{ICuke::SDK.fullname}"
 end
