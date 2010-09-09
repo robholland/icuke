@@ -16,10 +16,6 @@ begin
     gem.add_dependency "nokogiri", ">= 0"
     gem.add_dependency "background_process"
     gem.extensions = ['ext/Rakefile']
-    gem.files += ['ext/bin/waxsim']
-    gem.files += ['ext/iCuke/libicuke*.dylib']
-    gem.files += ['ext/WaxSim/**/*']
-    gem.files -= ['ext/WaxSim/build']
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
