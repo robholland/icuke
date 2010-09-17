@@ -185,7 +185,7 @@ After do
   quit
 end
 
-Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, platform, sdk_version|
+Given /^(?:"([^\"]*)" from )?"([^\"]*)"(?: with build configuration "([^\"]*)")? is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, configuration, platform, sdk_version|
   if sdk_version
     ICuke::SDK.use(sdk_version)
   elsif platform
@@ -197,6 +197,7 @@ Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simu
   launch File.expand_path(project),
          :target => target,
          :platform => platform,
+         :configuration => configuration,
          :env => {
            'DYLD_INSERT_LIBRARIES' => ICuke::SDK.dylib_fullpath
          }
