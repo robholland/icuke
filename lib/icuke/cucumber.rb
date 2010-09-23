@@ -34,6 +34,15 @@ class ICukeWorld
     @simulator.record
   end
   
+  def tap_at_point(x, y, options={})
+    options = {
+      :pause => true
+    }.merge(options)
+    @simulator.fire_event(Tap.new(x,y,options))
+    sleep(options[:pause] ? 2 : 0.2)
+    refresh
+  end
+
   def tap(label, options = {}, &block)
     options = {
       :pause => true
@@ -220,6 +229,10 @@ end
 
 When /^I tap "([^\"]*)"$/ do |label|
   tap(label)
+end
+
+When /^I tap (\d+),(\d+)$/ do |x,y|
+  tap_at_point(x.to_i, y.to_i)
 end
 
 When /^I type "([^\"]*)"(?: in "([^\"]*)")?$/ do |text, textfield|
