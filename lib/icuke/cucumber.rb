@@ -220,7 +220,7 @@ When /^I tap "([^\"]*)"$/ do |label|
   tap(label)
 end
 
-When /^I type "([^\"]*)" in "([^\"]*)"$/ do |text, textfield|
+When /^I type "([^\"]*)"(?: in "([^\"]*)")?$/ do |text, textfield|
   type(textfield, text)
 end
 
