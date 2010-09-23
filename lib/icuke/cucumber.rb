@@ -94,10 +94,12 @@ class ICukeWorld
   end
 
   def type(textfield, text, options = {})
-    tap(textfield, :hold_for => 0.75) do |field|
-      if field['value']
-        tap('Select All')
-        tap('Delete')
+    unless textfield == '' || textfield.nil?
+      tap(textfield, :hold_for => 0.75) do |field|
+        if field['value']
+          tap('Select All')
+          tap('Delete')
+        end
       end
     end
     
