@@ -204,7 +204,8 @@ Given /^(?:"([^\"]*)" from )?"([^\"]*)"(?: with build configuration "([^\"]*)")?
   else
     ICuke::SDK.use_latest
   end
-  
+  configuration = 'Debug' if configuration.nil?
+
   launch File.expand_path(project),
          :target => target,
          :platform => platform,
