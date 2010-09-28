@@ -23,12 +23,6 @@ class ICukeWorld
   end
 end
 
-World do
-  ICukeWorld.new
-end
-
-After do
-  simulator_driver.quit
 end
 
 Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, platform, sdk_version|
