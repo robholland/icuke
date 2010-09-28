@@ -4,5 +4,5 @@ require 'icuke/cucumber'
 
 World(ICukeWorld)
 After do
-  simulator_driver.quit
+  icuke_driver.quit
 end

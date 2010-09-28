@@ -4,12 +4,12 @@ require 'icuke/sdk'
 require 'icuke/simulator_driver'
 
 module ICukeWorld
-  def simulator_driver
-    @simulator_driver ||= ICuke::SimulatorDriver.default_driver(configuration)
+  def icuke_driver
+    @icuke_driver ||= ICuke::SimulatorDriver.default_driver(icuke_configuration)
   end
   
-  def configuration
-    @configuration ||= ICuke::Configuration.new({
+  def icuke_configuration
+    @icuke_configuration ||= ICuke::Configuration.new({
       :build_configuration => 'Debug'
     })
   end
@@ -24,7 +24,7 @@ Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simu
     ICuke::SDK.use_latest
   end
   
-  simulator_driver.launch File.expand_path(project),
+  icuke_driver.launch File.expand_path(project),
          :target => target,
          :platform => platform,
          :env => {
@@ -38,53 +38,53 @@ Given /^the module "([^\"]*)" is loaded in the simulator$/ do |path|
 end
 
 Then /^I should see "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, scope|
-  raise %Q{Content "#{text}" not found in: #{screen.xml}} unless simulator_driver.screen.visible?(text, scope)
+  raise %Q{Content "#{text}" not found in: #{screen.xml}} unless icuke_driver.screen.visible?(text, scope)
 end
 
 Then /^I should not see "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, scope|
-  raise %Q{Content "#{text}" was found but was not expected in: #{screen.xml}} if simulator_driver.screen.visible?(text, scope)
+  raise %Q{Content "#{text}" was found but was not expected in: #{screen.xml}} if icuke_driver.screen.visible?(text, scope)
 end
 
 When /^I tap "([^\"]*)"$/ do |label|
-  simulator_driver.tap(label)
+  icuke_driver.tap(label)
 end
 
 When /^I type "([^\"]*)" in "([^\"]*)"$/ do |text, textfield|
-  simulator_driver.type(textfield, text)
+  icuke_driver.type(textfield, text)
 end
 
 When /^I drag from (.*) to (.*)$/ do |source, destination|
-  simulator_driver.drag_with_source(source, destination)
+  icuke_driver.drag_with_source(source, destination)
 end
 
 When /^I select the "(.*)" slider and drag (.*) pixels (down|up|left|right)$/ do |label, distance, direction|
-  simulator_driver.drag_slider_to(label, direction.to_sym, distance.to_i)
+  icuke_driver.drag_slider_to(label, direction.to_sym, distance.to_i)
 end
 
 When /^I move the "([^\"]*)" slider to (.*) percent$/ do |label, percent|
-  simulator_driver.drag_slider_to_percentage(label, percent.to_i)
+  icuke_driver.drag_slider_to_percentage(label, percent.to_i)
 end
 
 When /^I scroll (down|up|left|right)(?: to "([^\"]*)")?$/ do |direction, text|
   if text
-    simulator_driver.scroll_to(text, :direction => direction.to_sym)
+    icuke_driver.scroll_to(text, :direction => direction.to_sym)
   else
-    simulator_driver.scroll(direction.to_sym)
+    icuke_driver.scroll(direction.to_sym)
   end
 end
 
 When /^I suspend the application/ do
-  simulator_driver.suspend
+  icuke_driver.suspend
 end
 
 When /^I resume the application/ do
-  simulator_driver.resume
+  icuke_driver.resume
 end
 
 Then /^I put the phone into recording mode$/ do
-  simulator_driver.record
+  icuke_driver.record
 end
 
 Then /^show me the screen$/ do
-  puts simulator_driver.screen.xml.to_s
+  puts icuke_driver.screen.xml.to_s
 end
