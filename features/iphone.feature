@@ -4,7 +4,7 @@ Feature: iPhone integration tests
   I want cucumber to be able to drive the simulator
 
   Background:
-    Given "app/Universal.xcodeproj" with build configuration "Release" is loaded in the iphone simulator
+    Given "app/Universal.xcodeproj" is loaded in the iphone simulator
 
   Scenario: Scrolling
     When I tap "Show Test Modal"
