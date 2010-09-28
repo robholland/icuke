@@ -4,6 +4,7 @@ require 'icuke/sdk'
 require 'icuke/simulator'
 require 'icuke/simulate'
 require 'icuke/screen'
+require 'icuke/configuration'
 
 class ICukeWorld
   include ICuke::Simulate::Gestures
@@ -14,12 +15,26 @@ class ICukeWorld
     @simulator = ICuke::Simulator.new
   end
   
+  def self.configure(&block)
+    configuration.instance_eval(&block)
+  end
+  
   def launch(application, options = {})
-    @simulator.launch(application, options)
+    default_options = {:build_configuration => configuration[:build_configuration]}
+    process = ICuke::Simulator::Process.new(application, default_options.merge(options))
+    @simulator.launch(process)
   end
   
   def quit
     @simulator.quit
+  end
+  
+  def suspend
+    @simulator.suspend
+  end
+  
+  def resume
+    @simulator.resume
   end
   
   def screen
@@ -53,7 +68,7 @@ class ICukeWorld
     
     @simulator.fire_event(Tap.new(x, y, options))
     
-    sleep(options[:pause] ? 2 : 0.2)
+    sleep(options[:pause] ? 0.75 : 0.2)
     
     refresh
     
@@ -63,13 +78,11 @@ class ICukeWorld
   def swipe(direction, options = {})
     x, y, x2, y2 = screen.swipe_coordinates(direction)
     @simulator.fire_event(Swipe.new(x, y, x2, y2, 0.015, options))
-    sleep(1)
     refresh
   end
 
   def drag(source_x, source_y, dest_x, dest_y, options = {})
     @simulator.fire_event(Drag.new(source_x, source_y, dest_x, dest_y, 0.15, options))
-    sleep(1)
     refresh
   end
 
@@ -114,7 +127,7 @@ class ICukeWorld
     
     # Without this sleep fields which have auto-capitilisation/correction can
     # miss the first keystroke for some reason.
-    sleep(0.5)
+    sleep(0.3)
     
     text.split('').each do |c|
       begin
@@ -153,17 +166,17 @@ class ICukeWorld
   end
   
   def scroll_to(text, options = {})
-    x, y, x2, y2 = screen.swipe_coordinates(swipe_direction(options[:direction]))
     previous_response = response.dup
     until screen.visible?(text) do
-      @simulator.fire_event(Swipe.new(x, y, x2, y2, 0.15, options))
-      refresh
+      scroll(options[:direction])
       raise %Q{Content "#{text}" not found in: #{screen}} if response == previous_response
     end
   end
   
   def scroll(direction)
-    swipe(swipe_direction(direction))
+    x, y, x2, y2 = screen.swipe_coordinates(swipe_direction(direction))
+    @simulator.fire_event(Swipe.new(x, y, x2, y2, 0.12, {}))
+    refresh
   end
   
   def set_application_defaults(defaults)
@@ -185,7 +198,16 @@ class ICukeWorld
   def direction_modifier(direction)
     [:up, :left].include?(direction) ? -1 : 1
   end
-
+  
+  def self.configuration
+    @configuration ||= ICuke::Configuration.new({
+      :build_configuration => 'Debug'
+    })
+  end
+  
+  def configuration
+    self.class.configuration
+  end
 end
 
 World do
@@ -258,6 +280,14 @@ When /^I scroll (down|up|left|right)(?: to "([^\"]*)")?$/ do |direction, text|
   else
     scroll(direction.to_sym)
   end
+end
+
+When /^I suspend the application/ do
+  suspend
+end
+
+When /^I resume the application/ do
+  resume
 end
 
 Then /^I put the phone into recording mode$/ do
