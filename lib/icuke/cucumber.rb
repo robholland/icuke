@@ -3,26 +3,16 @@ require 'nokogiri'
 require 'icuke/sdk'
 require 'icuke/simulator_driver'
 
-class ICukeWorld
+module ICukeWorld
   def simulator_driver
     @simulator_driver ||= ICuke::SimulatorDriver.default_driver(configuration)
   end
   
-  def self.configure(&block)
-    configuration.instance_eval(&block)
-  end
-  
-  def self.configuration
+  def configuration
     @configuration ||= ICuke::Configuration.new({
       :build_configuration => 'Debug'
     })
   end
-  
-  def configuration
-    self.class.configuration
-  end
-end
-
 end
 
 Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, platform, sdk_version|
