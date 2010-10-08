@@ -1,9 +1,11 @@
-= iCuke
+iCuke
+=====
 
 iCuke allows you to test an iPhone application with cucumber. It provides a selection of step definitions similar to
 those provided for testing web applications.
 
-== Usage
+Usage
+-----
 
 Install the gem and load the iCuke step definitions in a cucumber support file:
 
@@ -18,7 +20,8 @@ Write some scenarios like:
     When I tap "About"
     Then I should see "Author:"
 
-== How it works
+How it works
+------------
 
 iCuke launches your application into the iPhone Simulator. A preload library is used to add a HTTP server into your
 application.
@@ -28,7 +31,8 @@ The HTTP server allows us to see an XML version of the iPhone's screen, and to e
 iCuke should not require any code changes to your application to work, however, it relies on accessibility information
 to function sensibly. If your accessibility information is not accurate, iCuke may not work as expected.
 
-== Bugs
+Bugs
+----
 
 iCuke does not support testing applications on real devices, because I don't know of a way get a preload library to
 load on the device.
@@ -37,7 +41,15 @@ iCuke does not support pinches yet. They'll be here soon!
 
 iCuke compiles against the latest 3.1 and 4.0 SDKs it can find. Compiling against 3.2 is not currently supported as Apple have released two versions with different ABIs.
 
-== Contributors
+Future development
+------------------
+
+The initial development of iCuke was sponsored by Unboxed Consulting. That sponsorship has now ended. In order to help support the future development of iCuke please consider donating.
+
+<a href='http://www.pledgie.com/campaigns/13697'><img alt='Click here to lend your support to: iCuke and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/13697.png?skin_name=chrome' border='0' /></a>
+
+Contributors
+------------
 
 * Nigel Taylor
 * Aslak Hellesøy
@@ -45,7 +57,8 @@ iCuke compiles against the latest 3.1 and 4.0 SDKs it can find. Compiling agains
 * Jeff Morgan
 * Luke Redpath
 
-== Thanks
+Thanks
+------
 
 Thanks go to the people who's work iCuke is based on:
 
@@ -53,7 +66,8 @@ Thanks go to the people who's work iCuke is based on:
 * Ian Dees
 * Felipe Barreto
 
-== Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+-----------------------------
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -63,6 +77,7 @@ Thanks go to the people who's work iCuke is based on:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+Copyright
+---------
 
 Copyright (c) 2010 Unboxed Consulting. See LICENSE for details.
