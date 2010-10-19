@@ -16,11 +16,6 @@ begin
     gem.add_dependency "nokogiri", ">= 0"
     gem.add_dependency "background_process"
     gem.extensions = ['ext/Rakefile']
-    gem.files += ['ext/bin/waxsim']
-    gem.files += ['ext/iCuke/libicuke*.dylib']
-    gem.files += ['ext/WaxSim/**/*']
-    gem.files += ['lib/icuke/**/*.rb']
-    gem.files -= ['ext/WaxSim/build']
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -28,14 +23,14 @@ rescue LoadError
 end
 
 file 'app/build/Debug-iphonesimulator/Universal.app/Universal' do
+  require 'lib/icuke/sdk'
   ICuke::SDK.use_latest
   sh "cd app && xcodebuild -target Universal -configuration Debug -sdk #{ICuke::SDK.fullname}"
 end
 task :app => 'app/build/Debug-iphonesimulator/Universal.app/Universal'
-task :features => :app
 
 task :lib do
-  sh 'cd ext/iCuke && rake'
+  sh 'cd ext && rake'
 end
 
 begin
@@ -43,7 +38,7 @@ begin
   Cucumber::Rake::Task.new(:features)
 
   task :features => :check_dependencies
-  task :features => [:app, :lib]
+  task :features => [:lib, :app]
 rescue LoadError
   task :features do
     abort "Cucumber is not available. In order to run features, you must: sudo gem install cucumber"

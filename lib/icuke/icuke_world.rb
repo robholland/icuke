@@ -4,8 +4,6 @@ require 'icuke/sdk'
 require 'icuke/simulator_driver'
 
 module ICukeWorld
-
-  
   def icuke_driver
     @icuke_driver ||= ICuke::SimulatorDriver.default_driver(icuke_configuration)
   end
@@ -21,7 +19,7 @@ After do
   icuke_driver.quit
 end
 
-Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, platform, sdk_version|
+Given /^(?:"([^\"]*)" from )?"([^\"]*)"(?: with build configuration "([^\"]*)")? is loaded in the (?:(iphone|ipad) )?simulator(?: with SDK ([0-9.]+))?$/ do |target, project, configuration, platform, sdk_version|
   if sdk_version
     ICuke::SDK.use(sdk_version)
   elsif platform
@@ -29,13 +27,14 @@ Given /^(?:"([^\"]*)" from )?"([^\"]*)" is loaded in the (?:(iphone|ipad) )?simu
   else
     ICuke::SDK.use_latest
   end
-  
-  icuke_driver.launch File.expand_path(project),
-         :target => target,
-         :platform => platform,
-         :env => {
-           'DYLD_INSERT_LIBRARIES' => ICuke::SDK.dylib_fullpath
-         }
+  attrs = { :target => target,
+            :platform => platform,
+            :env => {
+              'DYLD_INSERT_LIBRARIES' => ICuke::SDK.dylib_fullpath
+            }
+          }
+  attrs.merge!(:build_configuration => configuration) if configuration
+  icuke_driver.launch(File.expand_path(project), attrs)
 end
 
 Given /^the module "([^\"]*)" is loaded in the simulator$/ do |path|
